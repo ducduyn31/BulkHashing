@@ -5,7 +5,7 @@ from optparse import OptionParser
 from collector import SampleCollector, UniformCollectorEngine
 from flow import HashingFlow
 from hasher import HashAndTime
-from save_result import Analysis
+from save_result import Analysis, get_duplications
 
 parser = OptionParser()
 
@@ -23,12 +23,12 @@ def main():
                 HashAndTime(sha512),
                 Analysis()
             ])
-            total_time, dups = hsf.start({'file': fbuffer})
+            total_time = hsf.start({'file': fbuffer})
 
     with open('analysis-{}-{}-blocks.txt'.format(options.extension, options.blocks), 'w') as f:
         f.write('HASH USING SHA512 FOR {} EXTENSION WITH {} BLOCKS SAMPLED\n'.format(options.extension, options.blocks))
         f.write('TOTAL TIME: {}\n'.format(total_time))
-        f.write('TOTAL DUPLICATIONS: {}\n'.format(dups))
+        f.write('TOTAL DUPLICATIONS: {}\n'.format(get_duplications()))
 
 
 if __name__ == '__main__':
